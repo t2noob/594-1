@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<p>
+This page contains experiments that confirm the information given in 
+<a href="http://javascriptweblog.wordpress.com/2010/06/07/understanding-javascript-prototypes/">Understanding JavaScript Prototypes</a>.
+</p>
+
+<p>
+Look in Javascript console for test results; view source to see tests.
+</p>
+
+<script>
+
+function assert(e) {
+	if (!e) {
+		alert('failed!');
+	}
+}
+
+var a = {};
+
+assert(typeof Object.getPrototypeOf(a) === 'object');
+assert(a.__proto__ === Object.getPrototypeOf(a));
+assert(typeof a.this_does_not_exist !== 'object');
+assert(typeof a.this_does_not_exist === 'undefined');
+
+assert(a.constructor === Object);
+assert(typeof a.constructor === 'function');
+assert(typeof a.constructor.prototype === 'object');
+assert(a.constructor.prototype === a.__proto__);
+
+// When a primitive is asked for it’s prototype it will be coerced to an object.
+assert(false.__proto__ === Boolean(false).__proto__);
+
+// Everything that is not a function does not have a prototype property.
+assert(a.prototype === undefined);
+
+// The following contradicts the article!  Math.max is a function without a prototype.
+assert(typeof Math.max.prototype === 'undefined');
+assert(typeof Math.max === 'function');
+var max_can_be_constructor = true;
+try {
+	var m = new Math.max(0, 1);
+} catch (e) {
+	max_can_be_constructor = false;
+}
+assert(max_can_be_constructor === false);
+// End of contradictions.
+
+function A(name) {
+	this.name = name;
+};
+assert(typeof A.prototype === 'object');
+assert(A.prototype !== A.__proto__);
+var A_has_properties = false;
+for (var props in A) {
+	A_has_properties = true;
+}
+assert(A_has_properties === false);
+
+var a2 = new A('sam');
+assert(a2.constructor === A);
+assert(a2.__proto__ === A.prototype);
+
+A.prototype.getGreeting = function() {
+	return 'Hello, ' + this.name + '.';
+};
+var a3 = new A('alice');
+assert(a3.getGreeting() === 'Hello, alice.');
+
+A.prototype.x = 42;
+assert(a3.x === 42);
+
+A.prototype.x = 7;
+assert(a3.x === 7);
+
+A.prototype = { x: 42 };
+assert(a3.x !== 42);
+
+function B() { };
+assert(typeof B.prototype === 'object');
+assert(typeof B.prototype.constructor === 'function');
+assert(B.prototype.constructor !== Function);  // I don't understand this.
+// The constructor property is not found using "for ... in"
+var B_prototype_has_properties = false;
+for (props in B.prototype) {
+	B_prototype_has_properties = true;
+}
+assert(B_prototype_has_properties === false);
+
+var b = new B();
+assert(b.constructor === B);
+
+assert(b instanceof B === true);
+b.__proto__ = { };
+assert(b instanceof B === false);
+
+var b2 = new B();
+assert(b2.__proto__ === B.prototype);
+assert(b2.__proto__.__proto__ === B.prototype.__proto__);
+assert(b2.__proto__.__proto__.__proto__ === B.prototype.__proto__.__proto__);
+assert(B.prototype.__proto__.__proto__ === null);
+assert(B.prototype.__proto__ === Object.prototype);
+assert(Object.prototype.__proto__ === null);
+
+</script>
