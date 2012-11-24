@@ -8,130 +8,123 @@ What about inheritance?
 View source to see tests.
 </p>
 
-<div id="result">All tests passed.</div>
+<script src="assert.js"></script>
 
 <script>
-
-function assert(e) {
-	if (!e) {
-		document.getElementById('result').innerHTML = 'A test failed.';
-		document.getElementById('result').style.color = 'red';
+	
+	/////////////////////////////////////////////
+	//
+	// Alternative 1 (classical inheritance)
+	
+	function A(x) {
+		this.x = x;
 	}
-}
-
-/////////////////////////////////////////////
-//
-// Alternative 1 (classical inheritance)
-
-function A(x) {
-	this.x = x;
-}
-
-A.prototype.addToX = function(dx) {
-	this.x += dx;
-};
-
-function B(x, y) {
-	A.call(this, x);
-	this.y = y;
-}
-
-B.prototype = new A(0);
-
-B.prototype.addToY = function(dy) {
-	this.y += dy;
-};
-
-var a = new A(3);
-assert(a.x === 3);
-a.addToX(1);
-assert(a.x === 4);
-
-var b = new B(13, 17);
-assert(b.x === 13);
-assert(b.y === 17);
-b.addToX(1);
-assert(b.x === 14);
-b.addToY(1);
-assert(b.y === 18);
-
-
-/////////////////////////////////////////////
-//
-// Alternative 2 (sharing functions)
-
-function A2(x) {
-	this.x = x;
-};
-
-function B2(x, y) {
-	A2.call(this, x);  // or this.x = x;
-	this.y = y;
-};
-
-(function() {
-
-	var addToX = function(dx) {
+	
+	A.prototype.addToX = function(dx) {
 		this.x += dx;
 	};
 	
-	var addToY = function(dy) {
+	function B(x, y) {
+		A.call(this, x);
+		this.y = y;
+	}
+	
+	B.prototype = new A(0);
+	
+	B.prototype.addToY = function(dy) {
 		this.y += dy;
 	};
-
-	A2.prototype.addToX = addToX;
 	
-	B2.prototype.addToX = addToX;
-	B2.prototype.addToY = addToY;
-})();
-
-var a2 = new A2(3);
-assert(a2.x === 3);
-a2.addToX(1);
-assert(a2.x === 4);
-
-var b2 = new B2(13, 17);
-assert(b2.x === 13);
-assert(b2.y === 17);
-b2.addToX(1);
-assert(b2.x === 14);
-b2.addToY(1);
-assert(b2.y === 18);
-
-
-/////////////////////////////////////////////
-//
-// Alternative 3  (composition)
-
-function A3(x) {
-	this.x = x;
-};
-
-A3.prototype.addToX = function(dx) {
-	this.x += dx;
-};
-
-function B3(a, y) {
-	this.a = a;
-	this.y = y;
-};
-
-B3.prototype.addToY = function(dy) {
-	this.y += dy;
-};
-
-var a3 = new A3(3);
-assert(a3.x === 3);
-a3.addToX(1);
-assert(a3.x === 4);
-
-var b3 = new B3(new A3(13), 17);
-assert(b3.a.x === 13);
-assert(b3.y === 17);
-b3.a.addToX(1);
-assert(b3.a.x === 14);
-b3.addToY(1);
-assert(b3.y === 18);
+	var a = new A(3);
+	assert(a.x === 3);
+	a.addToX(1);
+	assert(a.x === 4);
+	
+	var b = new B(13, 17);
+	assert(b.x === 13);
+	assert(b.y === 17);
+	b.addToX(1);
+	assert(b.x === 14);
+	b.addToY(1);
+	assert(b.y === 18);
+	
+	
+	/////////////////////////////////////////////
+	//
+	// Alternative 2 (sharing functions)
+	
+	function A2(x) {
+		this.x = x;
+	};
+	
+	function B2(x, y) {
+		A2.call(this, x);  // or this.x = x;
+		this.y = y;
+	};
+	
+	(function() {
+	
+		var addToX = function(dx) {
+			this.x += dx;
+		};
+		
+		var addToY = function(dy) {
+			this.y += dy;
+		};
+	
+		A2.prototype.addToX = addToX;
+		
+		B2.prototype.addToX = addToX;
+		B2.prototype.addToY = addToY;
+	})();
+	
+	var a2 = new A2(3);
+	assert(a2.x === 3);
+	a2.addToX(1);
+	assert(a2.x === 4);
+	
+	var b2 = new B2(13, 17);
+	assert(b2.x === 13);
+	assert(b2.y === 17);
+	b2.addToX(1);
+	assert(b2.x === 14);
+	b2.addToY(1);
+	assert(b2.y === 18);
+	
+	
+	/////////////////////////////////////////////
+	//
+	// Alternative 3  (composition)
+	
+	function A3(x) {
+		this.x = x;
+	};
+	
+	A3.prototype.addToX = function(dx) {
+		this.x += dx;
+	};
+	
+	function B3(a, y) {
+		this.a = a;
+		this.y = y;
+	};
+	
+	B3.prototype.addToY = function(dy) {
+		this.y += dy;
+	};
+	
+	var a3 = new A3(3);
+	assert(a3.x === 3);
+	a3.addToX(1);
+	assert(a3.x === 4);
+	
+	var b3 = new B3(new A3(13), 17);
+	assert(b3.a.x === 13);
+	assert(b3.y === 17);
+	b3.a.addToX(1);
+	assert(b3.a.x === 14);
+	b3.addToY(1);
+	assert(b3.y === 18);
 
 
 </script>

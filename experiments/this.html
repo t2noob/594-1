@@ -5,25 +5,21 @@ What about this?
 </p>
 
 <p>
-Look in Javascript console for test results; view source to see tests.
+View source to see tests.
 </p>
 
+<script src="assert.js"></script>
+
 <script>
-
-function assert(e) {
-	if (!e) {
-		alert('failed!');
+	
+	var a = new Object;
+	
+	function F() {
+		this.x = 3;
 	}
-}
-
-var a = new Object;
-
-function F() {
-	this.x = 3;
-}
-
-F.call(a);
-
-assert(a.x === 3);
+	
+	F.call(a);
+	
+	assert(a.x === 3);
 
 </script>
