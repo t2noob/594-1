@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<body onload="onload()">
+
+<p>
+My solution for playing sound effects with the audio element.
+I tested this in firefox, safari, chrome and opera on OS X.
+</p>
+
+<audio id="click-sound" preload="auto">
+  <source src="Button_C-J_Fairba-8445_hifi.ogg" type="audio/ogg">
+  <source src="Button_C-J_Fairba-8445_hifi.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+function onload() {
+	document.getElementById('click-sound').volume = 0;
+	document.getElementById('click-sound').currentTime = 0;
+	document.getElementById('click-sound').play();
+}
+
+function playClick() {
+	document.getElementById('click-sound').volume = 1;
+	document.getElementById('click-sound').currentTime = 0;
+	document.getElementById('click-sound').play();
+}
+</script>
+
+<button onclick="playClick()">click me</button>
+
+</body>
