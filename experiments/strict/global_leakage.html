@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<p>
+See <a href="http://www.yuiblog.com/blog/2010/12/14/strict-mode-is-coming-to-town/">Strict
+mode is coming to town</a>
+</p>
+
+<p>
+View source to see tests.
+</p>
+
+<script src="assert.js"></script>
+
+<script>
+// Implied Global Variables
+
+(function() {
+  "use strict";
+  try {	a = 3; } catch (e) { }
+  assert(typeof a === 'undefined');
+}());
+
+(function() {
+  try {	a = 3; } catch (e) { }
+  assert(a === 3);
+}());
+
+</script>
